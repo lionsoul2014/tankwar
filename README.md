@@ -65,7 +65,11 @@ H - 弹出/隐藏帮助窗口.
 
 关卡设置类: org.lionsoul.tankwar.LionBarriers
 
-<h3>联系作者:</h3> 
+<h3>二. tankwar其他主页: </h3>
+tankwar开源中国: http://www.oschina.net/p/tankwar <br />
+tankwar下载: https://code.google.com/p/cx-util/downloads/list <br />
+
+<h3>三. 联系作者:</h3> 
 作者: 狮子的魂 <br />
 电子邮件: chenxin619315@gmail.com <br />
 QQ: 1187582057 <br />
