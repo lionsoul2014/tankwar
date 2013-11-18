@@ -1,3 +1,5 @@
+tankwar完整版本(jar文件, 源码)下载: https://code.google.com/p/cx-util/downloads/list <br />
+
 <h3>一. 关于tankwar: </h3>
 
 tankwar 是使用java开发的一个单机版的小游戏 (未使用任何游戏引擎).
@@ -66,6 +68,7 @@ H - 弹出/隐藏帮助窗口.
 关卡设置类: org.lionsoul.tankwar.LionBarriers
 
 <h3>二. tankwar其他主页: </h3>
+tankwar官方首页: http://code.google.com/p/cx-util/downloads/list <br />
 tankwar开源中国: http://www.oschina.net/p/tankwar <br />
 tankwar下载: https://code.google.com/p/cx-util/downloads/list <br />
 
