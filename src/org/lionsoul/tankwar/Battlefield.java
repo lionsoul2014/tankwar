@@ -26,7 +26,6 @@ import org.lionsoul.tankwar.model.Bullet;
 import org.lionsoul.tankwar.model.Explosion;
 import org.lionsoul.tankwar.model.Tank;
 import org.lionsoul.tankwar.tank.HeroTank;
-import org.lionsoul.tankwar.tank.RandomTank;
 import org.lionsoul.tankwar.util.AudioLoader;
 import org.lionsoul.tankwar.util.IConstants;
 import org.lionsoul.tankwar.util.ImageLoader;
@@ -145,6 +144,7 @@ public class Battlefield extends JFrame {
 			ImageLoader.loadImageIcon("tank/hero/1/hero-l.png").getImage(),
 			ImageLoader.loadImageIcon("tank/hero/1/hero-lu.png").getImage()	
 		};
+		
 		//enemy tank resource
 		enemyImages = new Image[][] {
 			new Image[] {
@@ -188,12 +188,14 @@ public class Battlefield extends JFrame {
 				ImageLoader.loadImageIcon("tank/enemy/4/tank-lu.gif").getImage()	
 			}
 		};
+		
 		//bullet resource
 		bulletImages = new Image[] {
 			ImageLoader.loadImageIcon("bullet/normal.png").getImage(),
 			ImageLoader.loadImageIcon("bullet/bomb.png").getImage(),
 			ImageLoader.loadImageIcon("bullet/missile.png").getImage()	
 		};
+		
 		//wall resource
 		wallImages = new Image[] {
 			ImageLoader.loadImageIcon("wall/grass.gif").getImage(),
@@ -201,6 +203,7 @@ public class Battlefield extends JFrame {
 			ImageLoader.loadImageIcon("wall/brick.gif").getImage(),
 			ImageLoader.loadImageIcon("wall/iron.gif").getImage()
 		};
+		
 		//explosion resource
 		explosionImages = new Image[][] {
 			new Image[] {
@@ -244,6 +247,7 @@ public class Battlefield extends JFrame {
 				ImageLoader.loadImageIcon("explosion/big/30.png").getImage()
 			}
 		};
+		
 		//create help image
 		gameHelp = new GameHelp(200, 200);
 		
@@ -282,12 +286,14 @@ public class Battlefield extends JFrame {
 	
 	/**
 	 * start to play the game . <br />
+	 * 
 	 * 1. clear the old components . <br />
 	 * 2. create the battlefield components 
 	 * 			with the given barriers index . <br />
 	 * 3. change the state of the battlefiled to GAME_RUNING . <br />
 	 */
-	public void play( int idx ) {
+	public void play( int idx ) 
+	{
 		gresult = null;				//reset the game result user interface
 		hero = null;				//clear the hero
 		if ( tanks != null ) tanks.clear();
@@ -323,18 +329,29 @@ public class Battlefield extends JFrame {
 		
 		//enemy tank
 		width = IConstants.T_WIDTH; height = IConstants.T_WIDTH;
-		int tanknum = TankFactory.DEFAULT_TANK_OUTPUT;
+		int tanknum = TankFactory.DEFAULT_TANK_OUTPUT - 1;
 		if ( barrier.getEnemyNumber() < tanknum ) tanknum = barrier.getEnemyNumber();
-		RandomTank etank;
-		for ( int j = 0; j < tanknum; j++ ) {
-			etank = TankFactory.createRandomTank(this, width, height, barrier.getEnemyArgs());
+		Tank etank;
+		int type;
+		for ( int j = 0; j < tanknum; j++ ) 
+		{
+			//make it here for now, acturly we need a good alrigthm for the generate of tank
+			type = ((int)(Math.random() * 1000)) % 6;
+			if ( type >= 4 )
+				type = TankFactory.WICH_ENEMY_TANK;
+			else
+				type = TankFactory.RANDOM_ENEMY_TANK;
+			
+			
+			etank = TankFactory.createEnemyTank(this, width, height,
+						barrier.getEnemyArgs(), type);
 			tanks.put(etank.getSerial(), etank);
 		}
 		
 		//set the walls
 		tankmap.setWalls(RandomWordsMap.generate(
 				wallImages, 8, 8,
-				tankmap.getCols() - 2 * hero.getCols(),
+				tankmap.getCols() - 2 * hero.getCols(),		//left some space for the round
 				tankmap.getRows() - 2 * hero.getRows(), hero.getCols(), hero.getRows() ));
 		
 		//bullets
@@ -356,8 +373,10 @@ public class Battlefield extends JFrame {
 			public void run() {
 				while ( true ) {
 					if ( state == GAME_OVERED ) break;
-					if ( state == GAME_PUSHED ) {
-						synchronized ( lock ) {
+					if ( state == GAME_PUSHED ) 
+					{
+						synchronized ( lock ) 
+						{
 							try {lock.wait();} catch (InterruptedException e) {break;}
 						}
 					}
@@ -368,14 +387,15 @@ public class Battlefield extends JFrame {
 						continue;
 					}*/
 					
-					switch ( state ) {
-					case GAME_BARRIER_SELECT: bselector.draw(bufferScreen); break;
-					case GAME_MAP_SELECT:	break;
-					case GAME_RUNING: runningDraw(); break;
-					case GAME_FAILED:
-					case GAME_SUCCEED:
-						if ( gresult != null ) gresult.draw(bufferScreen);
-						break;
+					switch ( state ) 
+					{
+						case GAME_BARRIER_SELECT:	bselector.draw(bufferScreen); break;
+						case GAME_MAP_SELECT:		break;
+						case GAME_RUNING: 			runningDraw(); break;
+						case GAME_FAILED:
+						case GAME_SUCCEED:
+							if ( gresult != null ) gresult.draw(bufferScreen);
+							break;
 					}
 					
 					//draw the help window
@@ -397,7 +417,8 @@ public class Battlefield extends JFrame {
 	 * @param	ret
 	 * @return	GameResult
 	 */
-	public GameResult createGR( int ret ) {
+	public GameResult createGR( int ret ) 
+	{
 		ImageIcon icon = (ret == GAME_SUCCEED) ? ImageLoader.loadImageIcon("barriers/grass.gif")
 				: ImageLoader.loadImageIcon("barriers/sand.gif");
 		return new GameResult(w_size.width, w_size.height, ret, 2, icon);
@@ -406,7 +427,8 @@ public class Battlefield extends JFrame {
 	/**
 	 * draw the battlefield . <br /> 
 	 */
-	public void runningDraw() {
+	public void runningDraw() 
+	{
 		//draw the background.
 		drawBackground(bufferScreen);
 		
@@ -422,10 +444,12 @@ public class Battlefield extends JFrame {
 			state = GAME_SUCCEED;
 			gresult = createGR(GAME_SUCCEED);
 		}
+		
 		Iterator<Entry<Integer, Tank>> eit = tanks.entrySet().iterator();
 		Tank etank;
 		boolean _new = false;
-		while ( eit.hasNext() ) {
+		while ( eit.hasNext() ) 
+		{
 			Entry<Integer, Tank> e = eit.next();
 			etank = e.getValue();
 			if ( ! etank.isAlive() ) {
@@ -434,19 +458,30 @@ public class Battlefield extends JFrame {
 			}
 			else etank.draw(bufferScreen);
 		}
-		if ( _new ) {	//add new tank
+		
+		//check the mask to add new tank
+		if ( _new ) 
+		{	
 			if ( TankFactory.getTankOutput() 
-					< barriersSetting[bselector.getBarriers() - 1].getEnemyNumber() ) {
-				etank = TankFactory.createRandomTank(this, IConstants.T_WIDTH, IConstants.T_WIDTH, barriersSetting[bselector.getBarriers() - 1].getEnemyArgs());
+					< barriersSetting[bselector.getBarriers() - 1].getEnemyNumber() ) 
+			{
+				etank = TankFactory.createEnemyTank(this, IConstants.T_WIDTH, 
+						IConstants.T_WIDTH, barriersSetting[bselector.getBarriers() - 1].getEnemyArgs(),
+						TankFactory.WICH_ENEMY_TANK);
 				tanks.put(etank.getSerial(), etank);
 			}
 		}
 		
-		//bullets
-		synchronized ( bullets ) {
+		/* bullets
+		 * we should put the code in a synchronized block cause
+		 * the bullets of the hero tank will be added from the EDT thread
+		 * */
+		synchronized ( bullets ) 
+		{
 			Iterator<Bullet> bit = bullets.iterator();
 			Bullet btemp;
-			while ( bit.hasNext() ) {
+			while ( bit.hasNext() ) 
+			{
 				btemp = bit.next();
 				if ( ! btemp.isAlive() ) bit.remove();
 				else btemp.draw(bufferScreen);
@@ -459,7 +494,8 @@ public class Battlefield extends JFrame {
 		//explosion
 		Iterator<Explosion> expit = explosions.iterator();
 		Explosion exp;
-		while ( expit.hasNext() ) {
+		while ( expit.hasNext() ) 
+		{
 			exp = expit.next();
 			if ( exp.isAlive() ) exp.draw(bufferScreen);
 			else expit.remove();
@@ -470,9 +506,10 @@ public class Battlefield extends JFrame {
 	}
 	
 	/**
-	 * draw the game information . <br /> 
+	 * draw the game information
 	 */
-	private void drawGameInfo( Graphics g ) {
+	private void drawGameInfo( Graphics g ) 
+	{
 		String str = (mode<0?"Standard":"Simple")+" mode, Enemy:"+
 				(barriersSetting[bselector.getBarriers() - 1]
 						.getEnemyNumber() - TankFactory.getTankOutput() + tanks.size() - 1)
@@ -489,8 +526,19 @@ public class Battlefield extends JFrame {
 	 * 
 	 * @param	serial
 	 */
-	public Tank getTankBySerial( int serial ) {
+	public Tank getTankBySerial( int serial ) 
+	{
 		return tanks.get(serial);
+	}
+	
+	/**
+	 * get the serial of the hero tank
+	 * 
+	 *  @return	int
+	 */
+	public Tank getHeroTank()
+	{
+		return hero;
 	}
 	
 	/**
@@ -498,8 +546,10 @@ public class Battlefield extends JFrame {
 	 * 
 	 * @param	e
 	 */
-	public void addSynBullet( final Bullet e ) {
-		synchronized ( bullets ) {
+	public void addSynBullet( final Bullet e ) 
+	{
+		synchronized ( bullets ) 
+		{
 			bullets.add(e);
 		}
 		//start the shot sound
@@ -528,7 +578,8 @@ public class Battlefield extends JFrame {
 	 * 
 	 * @param	exp
 	 */
-	public void addExplosion( final Explosion exp ) {
+	public void addExplosion( final Explosion exp ) 
+	{
 		explosions.add(exp);
 		if ( isSoundOpen() ) {
 			tpool.execute(new Runnable(){
@@ -543,7 +594,8 @@ public class Battlefield extends JFrame {
 	/**
 	 * draw the background . <br /> 
 	 */
-	public void drawBackground( Graphics g ) {
+	public void drawBackground( Graphics g ) 
+	{
 		int x = 0, y = 0;
 		do {
 			bufferScreen.drawImage(background[bg], x, y, this);
@@ -559,7 +611,8 @@ public class Battlefield extends JFrame {
 	/**
 	 * hero tank key listener class . <br /> 
 	 */
-	private class TankKeyListener extends KeyAdapter {
+	private class TankKeyListener extends KeyAdapter 
+	{
 		@Override
 		public void keyPressed(KeyEvent e) {
 			//esc response
@@ -588,32 +641,34 @@ public class Battlefield extends JFrame {
 				gameHelp.setVisible(!gameHelp.isVisible());
 			}
 			
-			switch ( state ) {
-			case GAME_BARRIER_SELECT: bselector.keyPress(e); break;
-			case GAME_MAP_SELECT: break;
-			case GAME_RUNING:	
-				if ( e.getKeyCode() == KeyEvent.VK_M ) {
-					mode = ~mode;
+			switch ( state ) 
+			{
+				case GAME_BARRIER_SELECT: bselector.keyPress(e); break;
+				case GAME_MAP_SELECT: break;
+				case GAME_RUNING:	
+					if ( e.getKeyCode() == KeyEvent.VK_M ) {
+						mode = ~mode;
+						break;
+					}
+					hero.keyPress(e); 
 					break;
-				}
-				hero.keyPress(e); 
-				break;
-			case GAME_FAILED:
-				if ( e.getKeyCode() == KeyEvent.VK_R ) 
-					play(bselector.getBarriers() - 1);
-				break;
-			case GAME_SUCCEED:
-				if ( e.getKeyCode() == KeyEvent.VK_N && bselector.hasNext() ) {
-					play(bselector.next() - 1);
-				}
-				break;
+				case GAME_FAILED:
+					if ( e.getKeyCode() == KeyEvent.VK_R ) 
+						play(bselector.getBarriers() - 1);
+					break;
+				case GAME_SUCCEED:
+					if ( e.getKeyCode() == KeyEvent.VK_N && bselector.hasNext() ) {
+						play(bselector.next() - 1);
+					}
+					break;
 			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {			
-			switch ( state ) {
-			case GAME_RUNING:	hero.keyRelease(e); break;
+			switch ( state ) 
+			{
+				case GAME_RUNING:	hero.keyRelease(e); break;
 			}
 		}
 	}
@@ -660,7 +715,8 @@ public class Battlefield extends JFrame {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		Battlefield battle = new Battlefield();
 		battle.setVisible(true);
 		battle.loadResource();

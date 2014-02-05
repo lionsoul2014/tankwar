@@ -19,11 +19,13 @@ public class HeroTank extends Tank {
 	public HeroTank(Battlefield bf, Image[] images, int t, int serial,
 				int x, int y, int rows, int cols) {
 		super(bf, images, t, serial, x, y, cols, cols, IConstants.DIRECTION_U, 5);
+		infokey = "H";
 	}
 	
 	public HeroTank(Battlefield bf, Image[] images, int t, int serial,
 				int x, int y, int rows, int cols, int head, int blood ) {
 		super(bf, images, t, serial, x, y, rows, cols, head, blood);
+		infokey = "H";
 	}
 	
 	public void keyPress( KeyEvent e ) {

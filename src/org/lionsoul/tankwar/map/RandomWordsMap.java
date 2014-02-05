@@ -26,7 +26,8 @@ public class RandomWordsMap {
 	 * @param	y_offset	(start y offset in the map)
 	 */
 	public static HashMap<Integer, Wall> generate( Image[] images, int rows, int cols, 
-				int width, int height, int x_offset, int y_offset ) {
+				int width, int height, int x_offset, int y_offset ) 
+	{
 		//get the words
 		String str = WORDS[( (int) (Math.random() * 10000) ) % WORDS.length];
 		int[][] maps = WordsToRGB.invoke(width, height, str);

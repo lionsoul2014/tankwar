@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import org.lionsoul.tankwar.Battlefield;
+import org.lionsoul.tankwar.BulletFactory;
 import org.lionsoul.tankwar.map.TMap;
 import org.lionsoul.tankwar.util.IConstants;
 
@@ -30,19 +31,22 @@ public class Tank {
 	protected int x;
 	protected int y;
 	protected int t;
-	protected int rows;			//number of rows
-	protected int cols;			//number of cols
+	protected int rows;						//number of rows
+	protected int cols;						//number of cols
 	protected int head = IConstants.DIRECTION_U;
-	protected int direction = 0;	//move direction
+	protected int direction = 0;			//move direction
 	protected int offset = 1;
-	protected int blood;			//current number of bloods
-	private int life = -1;				//total number of bloods
+	protected int blood;					//current number of bloods
+	private int life = -1;					//total number of bloods
 	protected boolean alive = true;
 	
 	//bullets (Unlimited)
 	protected int movingBullets = 0;
 	protected int bomb = 1;
 	protected int missile = 0;
+	
+	//UI
+	protected String infokey = "T";
 	
 	/**
 	 * empty construct method . <br /> 
@@ -61,7 +65,8 @@ public class Tank {
 	 * @param	blood	blood count
 	 */
 	protected Tank( Battlefield bf, Image[] images, int t,
-			int serial, int x, int y, int cols, int rows, int head, int blood ) {
+			int serial, int x, int y, int cols, int rows, int head, int blood ) 
+	{
 		BF = bf;
 		MAP = BF.getMap();
 		this.images = images;
@@ -82,7 +87,8 @@ public class Tank {
 	 * 
 	 * @return	int
 	 */
-	public int getMoveDirection() {
+	public int getMoveDirection() 
+	{
 		int d = 0, direct = direction;		//copy the direction
 		if ( ( direct & IConstants.DIRECTION_U ) != 0 ) {		//move up
 			d = IConstants.DIRECTION_U;
@@ -111,59 +117,72 @@ public class Tank {
 	/**
 	 * @see Tank#draw(Graphics) 
 	 */
-	public void draw(Graphics g) {
-		if ( alive ) {
-		int x = this.x * MAP.getXoffset();
-		int y = this.y * MAP.getYoffset();
-		boolean ch = true, down = false;
-		switch ( head ) {
-		case IConstants.DIRECTION_U:	g.drawImage(images[0], x, y, null); down = true; break;
-		case IConstants.DIRECTION_RU:	g.drawImage(images[1], x, y, null); down = true; break;
-		case IConstants.DIRECTION_R:	g.drawImage(images[2], x, y, null); break;
-		case IConstants.DIRECTION_RD:	g.drawImage(images[3], x, y, null); break;
-		case IConstants.DIRECTION_D:	g.drawImage(images[4], x, y, null); break;
-		case IConstants.DIRECTION_LD:	g.drawImage(images[5], x, y, null); break;
-		case IConstants.DIRECTION_L:	g.drawImage(images[6], x, y, null); break;
-		case IConstants.DIRECTION_LU:	g.drawImage(images[7], x, y, null); down = true; break;
-		default : ch = false;
-		}
-		//draw the blood
-		if ( ch ) {
-			g.setColor(Color.RED);
-			int w = ( cols - 2 ) * MAP.getXoffset();
-			int h = 4;
-			x = x + MAP.getXoffset();
-			/*if the tank move up, draw it down the tank, or up the tank*/
-			y = down ? y + (rows + 1) * MAP.getYoffset() : y - 2 * MAP.getYoffset();
-			//y = y + (rows + 1) * MAP.getYoffset() ;
-			g.drawRect(x, y, w, h);
+	public void draw(Graphics g) 
+	{
+		if ( alive ) 
+		{
+			int x = this.x * MAP.getXoffset();
+			int y = this.y * MAP.getYoffset();
+			boolean ch = true, down = false;
 			
-			//draw the blood slider
-			if ( life == -1 ) life = blood;
-			g.fillRect(x + 1, y, blood * (w - 1) / life, h);
+			//check the move direction
+			switch ( head ) 
+			{
+			case IConstants.DIRECTION_U:	g.drawImage(images[0], x, y, null); down = true; break;
+			case IConstants.DIRECTION_RU:	g.drawImage(images[1], x, y, null); down = true; break;
+			case IConstants.DIRECTION_R:	g.drawImage(images[2], x, y, null); break;
+			case IConstants.DIRECTION_RD:	g.drawImage(images[3], x, y, null); break;
+			case IConstants.DIRECTION_D:	g.drawImage(images[4], x, y, null); break;
+			case IConstants.DIRECTION_LD:	g.drawImage(images[5], x, y, null); break;
+			case IConstants.DIRECTION_L:	g.drawImage(images[6], x, y, null); break;
+			case IConstants.DIRECTION_LU:	g.drawImage(images[7], x, y, null); down = true; break;
+			default : ch = false;
+			}
 			
-			//draw the life number
-			g.setColor(Color.WHITE);
-			g.setFont(font);
-			String str = blood+"/"+life+","+missile;
-			g.drawString(str,
-					x + ( w - g.getFontMetrics().stringWidth(str) ) / 2,
-					y + font.getSize() / 2);
-		}
-		
-		move();
+			//draw the blood
+			if ( ch ) 
+			{
+				g.setColor(Color.RED);
+				int w = ( cols - 2 ) * MAP.getXoffset();
+				int h = 5;
+				x = x + MAP.getXoffset();
+				/*if the tank move up, draw it down the tank, or up the tank*/
+				y = down ? y + (rows + 1) * MAP.getYoffset() : y - 2 * MAP.getYoffset();
+				//y = y + (rows + 1) * MAP.getYoffset() ;
+				g.drawRect(x, y, w, h);
+				
+				//draw the blood slider
+				if ( life == -1 ) life = blood;
+				g.fillRect(x + 1, y, blood * (w - 1) / life, h);
+				
+				//draw the life number
+				g.setColor(Color.WHITE);
+				g.setFont(font);
+				String str = blood+"/"+life+","+missile;
+				g.drawString(str,
+						x + ( w - g.getFontMetrics().stringWidth(str) ) / 2 + 2,
+						y + font.getSize() / 2 + 1);
+				
+				//draw the tank type keywords
+				g.drawString(infokey, x, y + font.getSize() / 2 + 1);
+			}
+			
+			move();
 		}
 	}
 	
 	/**
 	 * move the tank accoarding to the specified direction . <br />
 	 */
-	public void move() {
+	public void move() 
+	{
 		int d = getMoveDirection();
 		if ( d == 0 ) return;
 		head = d;
 		int off;
-		switch ( d ) {
+		
+		switch ( d ) 
+		{
 		case IConstants.DIRECTION_U:
 			off = getUpMoveOffset(x, y); if ( off != 0 ) moveUp( off ); break;
 		case IConstants.DIRECTION_RU:
@@ -198,14 +217,17 @@ public class Tank {
 	 * @param	y
 	 * @return	int
 	 */
-	protected int getUpMoveOffset( int x, int y ) {
+	protected int getUpMoveOffset( int x, int y ) 
+	{
 		int off = offset;
 		if ( y - offset < 0 ) off = y;
 		if ( MAP.checkMapBit( x, y - off, off, cols, TMap.BIT_BLANK ) ) return off;
 		return 0;
 	}
+	
 	/** move up */
-	private void moveUp( int off ) {
+	private void moveUp( int off ) 
+	{
 		MAP.setMapBit( x, y + rows - off, off, cols, TMap.BIT_BLANK );
 		y -= off;
 		MAP.setMapBit( x, y, off, cols, serial );
@@ -224,6 +246,7 @@ public class Tank {
 		if ( MAP.checkMapBit( x + cols, y, rows, off, TMap.BIT_BLANK ) ) return off;
 		return 0;
 	}
+	
 	/** move right */
 	private void moveRight( int off ) {
 		MAP.setMapBit( x, y, rows, off, TMap.BIT_BLANK );
@@ -244,6 +267,7 @@ public class Tank {
 		if ( MAP.checkMapBit( x, y + rows, off, cols, TMap.BIT_BLANK ) ) return off;
 		return 0;
 	}
+	
 	/** move down*/
 	private void moveDown( int off ) {
 		MAP.setMapBit( x, y, off, cols, TMap.BIT_BLANK );
@@ -264,6 +288,7 @@ public class Tank {
 		if ( MAP.checkMapBit( x - off, y, rows, off, TMap.BIT_BLANK ) ) return off;
 		return 0;
 	}
+	
 	/** move left*/
 	private void moveLeft( int off ) {
 		MAP.setMapBit( x + cols - off, y, rows, off, TMap.BIT_BLANK );
@@ -306,6 +331,29 @@ public class Tank {
 	}
 	public void reduceMovingBullets() {
 		movingBullets--;
+	}
+	
+	/**
+	 * add Bullets 
+	 */
+	public void addSynBullets()
+	{
+		Bullet bbt = BulletFactory.createEnemyBullet(BF, 
+				this, Bullet.NORMAL_BULLET, 0, 0, head);
+		bbt.setX(x + (cols - bbt.getCols()) / 2);
+		bbt.setY(y + (rows - bbt.getRows()) / 2);
+		increaseMovingBullets();
+		BF.addSynBullet(bbt);
+	}
+	
+	public void addBullets()
+	{
+		Bullet bbt = BulletFactory.createEnemyBullet(BF, 
+				this, Bullet.NORMAL_BULLET, 0, 0, head);
+		bbt.setX(x + (cols - bbt.getCols()) / 2);
+		bbt.setY(y + (rows - bbt.getRows()) / 2);
+		increaseMovingBullets();
+		BF.addBullet(bbt);
 	}
 
 	public int getX() {
@@ -360,7 +408,8 @@ public class Tank {
 		return alive;
 	}
 	
-	public void setAlive(boolean alive) {
+	public void setAlive(boolean alive) 
+	{
 		if ( alive == false ) MAP.setMapBit( x, y, rows, cols, TMap.BIT_BLANK );
 		this.alive = alive;
 	}
@@ -371,5 +420,10 @@ public class Tank {
 	
 	public int getType() {
 		return t;
+	}
+	
+	public int getDirectionMask()
+	{
+		return direction;
 	}
 }

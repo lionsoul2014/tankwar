@@ -114,7 +114,7 @@ public class Wall {
 		case WOOD_WALL:
 		case BRICK_WALL:
 			return true;
-		case Wall.IRON_WALL:
+		case IRON_WALL:
 			if ( b.getType() == Bullet.MISSILE_BULLET ) return true;
 			return false;
 		}

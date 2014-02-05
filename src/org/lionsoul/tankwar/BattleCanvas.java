@@ -24,8 +24,10 @@ public class BattleCanvas extends JPanel {
 	}
 	
 	@Override
-	public void paintComponent( Graphics g ) {
-		if ( bufferImage == null ) {
+	public void paintComponent( Graphics g ) 
+	{
+		if ( bufferImage == null ) 
+		{
 			//fill the background
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());

@@ -57,7 +57,8 @@ public class GameHelp {
 	 * 
 	 * @return	Image
 	 */
-	public Image getHelpImage() {
+	public Image getHelpImage() 
+	{
 		if ( image == null ) {
 			BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();

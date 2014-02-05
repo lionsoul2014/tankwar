@@ -12,7 +12,8 @@ import java.awt.image.BufferedImage;
  */
 public class WordsToRGB {
 	
-	public static int[][] invoke( int width, int height, String str ) {
+	public static int[][] invoke( int width, int height, String str ) 
+	{
 		
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics grap = image.getGraphics();

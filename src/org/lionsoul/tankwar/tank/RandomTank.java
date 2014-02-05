@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import org.lionsoul.tankwar.Battlefield;
-import org.lionsoul.tankwar.BulletFactory;
-import org.lionsoul.tankwar.model.Bullet;
 import org.lionsoul.tankwar.model.Tank;
 
 /**
@@ -25,33 +23,41 @@ public class RandomTank extends Tank {
 	public RandomTank(Battlefield bf, Image[] images, int t, int serial,
 				int x, int y, int rows, int cols ) {
 		super(bf, images, t, serial, x, y, rows, cols);
+		infokey = "R";
 	}
 	
 	public RandomTank( Battlefield bf, Image[] images, int t,
 			int serial, int x, int y, int rows, int cols, int head, int blood ) {
 		super(bf, images, t, serial, x, y, rows, cols, head, blood);
+		infokey = "R";
 	}
 	
 	@Override
-	public void draw( Graphics g ) {
+	public void draw( Graphics g ) 
+	{
 		super.draw(g);
-		//autonomous moveing
-		if ( moveInterval-- == 0 ) {
+		
+		//autonomous moving
+		if ( moveInterval-- == 0 ) 
+		{
 			int t = ( ( int ) ( Math.random() * 10000 ) ) % 7;
 			direction = 1 << t;
 			moveInterval = ( (int) ( Math.random() * 1000) ) % seeds[0];
 		}
 		
 		//autonomous shot
-		if ( shotInterval-- == 0 ) {
-			if ( couldShot() ) {
-			Bullet bbt = BulletFactory.createEnemyBullet(BF, 
-					this, Bullet.NORMAL_BULLET, 0, 0, head);
-			bbt.setX(x + (cols - bbt.getCols()) / 2);
-			bbt.setY(y + (rows - bbt.getRows()) / 2);
-			increaseMovingBullets();
-			BF.addBullet(bbt);
-			shotInterval = ( ( int ) ( (Math.random() + 1) * 10000 ) ) % seeds[1];
+		if ( shotInterval-- == 0 ) 
+		{
+			if ( couldShot() ) 
+			{
+				/*Bullet bbt = BulletFactory.createEnemyBullet(BF, 
+						this, Bullet.NORMAL_BULLET, 0, 0, head);
+				bbt.setX(x + (cols - bbt.getCols()) / 2);
+				bbt.setY(y + (rows - bbt.getRows()) / 2);
+				increaseMovingBullets();
+				BF.addBullet(bbt);*/
+				addBullets();
+				shotInterval = ( ( int ) ( (Math.random() + 1) * 10000 ) ) % seeds[1];
 			}
 		}
 	}

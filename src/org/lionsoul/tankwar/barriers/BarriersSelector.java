@@ -53,7 +53,8 @@ public class BarriersSelector {
 	 * @param	icons
 	 */
 	public BarriersSelector( Battlefield bf, int defualt,
-			int max, int offset, int w, int h, ImageIcon[] icons, AudioClip buttonClip ) {
+			int max, int offset, int w, int h, ImageIcon[] icons, AudioClip buttonClip ) 
+	{
 		this.BF = bf;
 		this.barriers = defualt;
 		this.max = max;
@@ -75,7 +76,8 @@ public class BarriersSelector {
 	 * 
 	 * @param	g
 	 */
-	public void draw( Graphics g ) {
+	public void draw( Graphics g ) 
+	{
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, w, h);
 		
@@ -91,7 +93,8 @@ public class BarriersSelector {
 			y - i_height / 2 - 10, null);
 		
 		//grass image
-		for ( int j = 0; j < 9; j++ ) {
+		for ( int j = 0; j < 9; j++ ) 
+		{
 			g.drawImage(grass.getImage(),
 					x - i_width - 10 + grass.getIconWidth() * j, y + 10, null);
 		}
@@ -99,7 +102,8 @@ public class BarriersSelector {
 		
 		g.setFont(numFont);
 		y = h / 2 - numFont.getSize() + 70;		//center - down space
-		for ( int j = 1; j <= max; j++ ) {
+		for ( int j = 1; j <= max; j++ ) 
+		{
 			if ( j < 10 ) str = "0"+j;
 			else str = ""+j;
 			x = (w - str_width) / 2 + offset * ( j - 1 );
@@ -140,7 +144,8 @@ public class BarriersSelector {
 	 * 
 	 * @param	e
 	 */
-	public void keyPress( KeyEvent e ) {
+	public void keyPress( KeyEvent e ) 
+	{
 		switch ( e.getKeyCode() ) {
 		case KeyEvent.VK_A:
 			if ( barriers > 1 ) {

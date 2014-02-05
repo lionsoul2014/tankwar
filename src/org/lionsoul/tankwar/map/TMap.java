@@ -16,7 +16,7 @@ import org.lionsoul.tankwar.model.Wall;
 public class TMap {
 	
 	public static final int BIT_BLANK = 0;
-	public static final int BIT_BULLET = - (1 << 20);
+	public static final int BIT_BULLET = -(1 << 20);
 	
 	protected int[][] maps = null;
 	protected int rows;
@@ -28,7 +28,8 @@ public class TMap {
 	protected HashMap<Integer, Wall> wallmap;
 	
 	public TMap( int rows, int cols,
-				int x_offset, int y_offset, HashMap<Integer, Wall> wallmap ) {
+				int x_offset, int y_offset, HashMap<Integer, Wall> wallmap ) 
+	{
 		this.rows = rows;
 		this.cols = cols;
 		this.x_offset = x_offset;
@@ -45,7 +46,8 @@ public class TMap {
 	 * 
 	 * @param	g
 	 */
-	public void draw( Graphics g ) {
+	public void draw( Graphics g ) 
+	{
 		//for debug
 		/*int x, y;
 		for ( y = 0; y < rows; y++ ) {
@@ -61,10 +63,12 @@ public class TMap {
 			}
 		}*/
 		
-		if ( wallmap != null ) {
+		if ( wallmap != null ) 
+		{
 			Iterator<Entry<Integer, Wall>> it = wallmap.entrySet().iterator();
 			Wall w;
-			while ( it.hasNext() ) {
+			while ( it.hasNext() ) 
+			{
 				Entry<Integer, Wall> e= it.next();
 				w = e.getValue();
 				if ( ! w.isAlive() ) it.remove();
@@ -97,9 +101,11 @@ public class TMap {
 	 * @param	cols
 	 * @param	val
 	 */
-	public void setMapBit( int x, int y, int rows, int cols, int val ) {
+	public void setMapBit( int x, int y, int rows, int cols, int val ) 
+	{
 		int c;
-		for ( int r = 0; r < rows; r++ ) {
+		for ( int r = 0; r < rows; r++ ) 
+		{
 			for ( c = 0; c < cols; c++ ) setBit(x + c, y + r, val);
 		}
 	}
@@ -113,10 +119,16 @@ public class TMap {
 	 * @param	y
 	 * @return	boolean
 	 */
-	public boolean checkMapBit( int x, int y, int rows, int cols, int val ) {
+	public boolean checkMapBit( int x, int y, int rows, int cols, int val ) 
+	{
 		int c;
-		for ( int r = 0; r < rows; r++ ) {
-			for ( c = 0; c < cols; c++ ) if ( getBit(x + c, y + r) != val ) return false;
+		for ( int r = 0; r < rows; r++ ) 
+		{
+			for ( c = 0; c < cols; c++ ) 
+			{
+				if ( getBit(x + c, y + r) != val ) 
+					return false;
+			}
 		}
 		return true;
 	}
@@ -133,9 +145,11 @@ public class TMap {
 		return y_offset;
 	}
 	
-	public void clear() {
+	public void clear() 
+	{
 		int x, y;
-		for ( y = 0; y < rows; y++ ) {
+		for ( y = 0; y < rows; y++ ) 
+		{
 			for ( x = 0; x < cols; x++ ) maps[y][x] = BIT_BLANK;
 		}
 	}
@@ -146,7 +160,8 @@ public class TMap {
 	 * @param	serial
 	 * @return	Wall
 	 */
-	public Wall getWall( int serial ) {
+	public Wall getWall( int serial ) 
+	{
 		if ( wallmap == null ) return null;
 		return wallmap.get(serial);
 	}
@@ -156,7 +171,8 @@ public class TMap {
 	 * 
 	 * @param	w
 	 */
-	public void clearWall( Wall w ) {
+	public void clearWall( Wall w ) 
+	{
 		if ( w != null ) {
 			setMapBit(w.getX(), w.getY(), w.getRows(), w.getCols(), BIT_BLANK);
 		}
@@ -165,18 +181,22 @@ public class TMap {
 	/**
 	 * set wall map . <br /> 
 	 */
-	public void setWalls( HashMap<Integer, Wall> wallmap ) {
+	public void setWalls( HashMap<Integer, Wall> wallmap ) 
+	{
 		this.wallmap = wallmap;
 		
 		//set the map bit
-		if ( wallmap != null ) {
+		if ( wallmap != null ) 
+		{
 			Iterator<Entry<Integer, Wall>> it = wallmap.entrySet().iterator();
 			Wall w;
-			while ( it.hasNext() ) {
+			while ( it.hasNext() ) 
+			{
 				Entry<Integer, Wall> e= it.next();
 				w = e.getValue();
 				if ( w.getType() != Wall.GRASS_WALL )
-					setMapBit(w.getX(), w.getY(), w.getRows(), w.getCols(), w.getSerial());
+					setMapBit(w.getX(), w.getY(),w.getRows(), 
+							w.getCols(), w.getSerial());
 			}
 		}
 	}
