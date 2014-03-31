@@ -15,11 +15,20 @@ import org.lionsoul.tankwar.model.Tank;
  * 
  * @author chenxin<chenxin619315@gmail.com>
  */
-public class FightBackTank extends Tank {
+public class CircleTank extends Tank {
 
-	public FightBackTank(Battlefield bf, Image[] images, int t, int serial,
-			int x, int y, int cols, int rows) {
+	public CircleTank(Battlefield bf, Image[] images, int t, int serial,
+			int x, int y, int cols, int rows) 
+	{
 		super(bf, images, t, serial, x, y, cols, rows);
+		infokey = "C";
+	}
+	
+	public CircleTank( Battlefield bf, Image[] images, int t,
+			int serial, int x, int y, int rows, int cols, int head, int blood ) 
+	{
+		super(bf, images, t, serial, x, y, rows, cols, head, blood);
+		infokey = "C";
 	}
 
 }

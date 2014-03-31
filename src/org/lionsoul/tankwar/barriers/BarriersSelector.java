@@ -22,7 +22,7 @@ public class BarriersSelector {
 	
 	private Font titleFont = new Font("Arial", Font.BOLD, 30);
 	private Font numFont = new Font("Arial", Font.BOLD, 30);
-	private Font cFont = new Font("宋体", Font.PLAIN, 12);
+	private Font cFont = new Font("Arial", Font.PLAIN, 12);
 	private Color sColor = new Color(100, 100, 35);
 	private Color color = new Color(230, 170, 5);
 
@@ -124,7 +124,7 @@ public class BarriersSelector {
 		x = (w - cw) / 2;
 		y = h / 10;
 		g.fill3DRect(x, y, cw, ch, true);
-		str = "畅想网络, 狮子的魂<chenxin619315@gmail.com>";
+		str = "Lionsoul chenxin<chenxin619315@gmail.com>";
 		g.setFont(cFont);
 		g.setColor(color);
 		g.drawString(str,
@@ -132,7 +132,7 @@ public class BarriersSelector {
 			y + cFont.getSize() + 2);
 		
 		//handling tip
-		str = "<操作提示: A, D左右移动, J 确认游戏, H 游戏帮助>";
+		str = "<Operation Tip: A, D-move around, J-sure, H-help>";
 		g.drawString(str, (w - g.getFontMetrics().stringWidth(str)) / 2,
 				y + ch + 20);
 		

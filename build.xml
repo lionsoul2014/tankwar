@@ -5,21 +5,21 @@
 		<echo message="------------------------------------------------------------"/>
 		<echo message="----------BUILDING JCSEG PACKAGE----------------------------"/>
 		<echo message=""/>
-		<property name="bottom" value="tankwar 2013"/>
+		<property name="bottom" value="tankwar 2013-2014"/>
 		<property name="jars" value="${basedir}"/>
 		<property name="sources" value="${basedir}/src"/>
 		<property name="classes" value="${basedir}/classes"/>
-		<property name="version" value="1.0-beta"/>
-		<property name="lib.dir" value="${basedir}/lib"/>
+		<property name="version" value="1.1"/>
 		<property name="api" value="${basedir}/doc"/>
 		
 		<delete dir="${classes}"/>
 		<delete dir="${api}"/>
-		<delete>
-			<fileset dir="${basedir}" includes="*.jar"/>
-		</delete>		
-
+		
 		<mkdir dir="${classes}"/>
+		<mkdir dir="${classes}/res"/>
+		<copy todir="${classes}/res">
+			<fileset dir="${sources}/res"/>
+		</copy>
 		<mkdir dir="${api}"/>
 	</target>
 	
@@ -30,14 +30,7 @@
 	<!--Build-->
 	<target name="build" depends="init">
 		<echo message="-------------Compiling Application--------------"/>
-		<echo message="${lib.dir}"/>
-		<javac srcdir="${sources}" destdir="${classes}">
-			<classpath>
-				<path id="classpath">
-					<fileset dir="${lib.dir}" includes="**/*.jar"/>
-				</path>
-			</classpath>
-		</javac>
+		<javac srcdir="${sources}" destdir="${classes}"></javac>
 	</target>
 	
 	<!--Archive-->
@@ -56,7 +49,7 @@
 	<!--Java document-->
 	<target name="all" depends="dist">
 		<echo message="------------Making Java Document------------------"/>
-		<javadoc packagenames="com.*"
+		<javadoc packagenames="org.*"
 				sourcepath="${sources}"
 				destdir="${api}"
 				bottom="${bottom}"

@@ -49,7 +49,7 @@ public class TMap {
 	public void draw( Graphics g ) 
 	{
 		//for debug
-		/*int x, y;
+/*		int x, y;
 		for ( y = 0; y < rows; y++ ) {
 			for ( x = 0; x < cols; x++ ) {
 				if ( maps[y][x] > 0 ) {
@@ -90,6 +90,26 @@ public class TMap {
 	
 	public int getBit( int x, int y ) {
 		return maps[y][x];
+	}
+	
+	/**
+	 * get the height of the map
+	 * 
+	 * @return int
+	 */
+	public int getHeight()
+	{
+		return height;
+	}
+	
+	/**
+	 * get the width of the map
+	 * 
+	 * @return int
+	 */
+	public int getWidth()
+	{
+		return width;
 	}
 	
 	/**

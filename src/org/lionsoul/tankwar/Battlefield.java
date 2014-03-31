@@ -296,9 +296,9 @@ public class Battlefield extends JFrame {
 	{
 		gresult = null;				//reset the game result user interface
 		hero = null;				//clear the hero
-		if ( tanks != null ) tanks.clear();
-		if ( bullets != null ) bullets.clear();
-		if ( explosions != null ) explosions.clear();
+		if ( tanks != null ) 		tanks.clear();
+		if ( bullets != null ) 		bullets.clear();
+		if ( explosions != null ) 	explosions.clear();
 		tankmap.clear();			//clear the map
 		System.gc();				//start the garbage collection
 		bselector.stopAudio();		//stop the barriers button audio
@@ -335,14 +335,10 @@ public class Battlefield extends JFrame {
 		int type;
 		for ( int j = 0; j < tanknum; j++ ) 
 		{
-			//make it here for now, acturly we need a good alrigthm for the generate of tank
-			type = ((int)(Math.random() * 1000)) % 6;
-			if ( type >= 4 )
-				type = TankFactory.WICH_ENEMY_TANK;
-			else
-				type = TankFactory.RANDOM_ENEMY_TANK;
-			
-			
+			/* make it here for now, 
+			 * Acturly we need a good alrigthm for the generate of enemy tanks
+			 */
+			type = ((int)(Math.random() * 1000)) % TankFactory.ENEMY_TANK_TYPE_NUMBER;
 			etank = TankFactory.createEnemyTank(this, width, height,
 						barrier.getEnemyArgs(), type);
 			tanks.put(etank.getSerial(), etank);

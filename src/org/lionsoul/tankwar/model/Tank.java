@@ -30,6 +30,8 @@ public class Tank {
 	protected Image[] images;
 	protected int x;
 	protected int y;
+	protected int width;					//width of the tank
+	protected int height;					//height of the tank
 	protected int t;
 	protected int rows;						//number of rows
 	protected int cols;						//number of cols
@@ -52,7 +54,8 @@ public class Tank {
 	 * empty construct method . <br /> 
 	 */
 	protected Tank( Battlefield bf, Image[] images, int t, 
-				int serial, int x, int y, int cols, int rows ) {
+				int serial, int x, int y, int cols, int rows ) 
+	{
 		this(bf, images, t, serial, x, y, cols, rows, 0, 2);
 	}
 	
@@ -69,6 +72,7 @@ public class Tank {
 	{
 		BF = bf;
 		MAP = BF.getMap();
+		
 		this.images = images;
 		this.t = t;
 		this.serial = serial;
@@ -78,7 +82,8 @@ public class Tank {
 		this.y = y;
 		this.head = head;
 		this.blood = blood;
-		
+		this.width = cols * bf.getMap().getXoffset();
+		this.head = rows * bf.getMap().getYoffset();
 		//setMapBit(x, y, rows, cols, serial);
 	}
 	
@@ -142,22 +147,41 @@ public class Tank {
 			//draw the blood
 			if ( ch ) 
 			{
+				//background color
 				g.setColor(Color.RED);
+				
+				//size of the blood info
 				int w = ( cols - 2 ) * MAP.getXoffset();
 				int h = 5;
+				
+				//position of the blood info
 				x = x + MAP.getXoffset();
-				/*if the tank move up, draw it down the tank, or up the tank*/
-				y = down ? y + (rows + 1) * MAP.getYoffset() : y - 2 * MAP.getYoffset();
-				//y = y + (rows + 1) * MAP.getYoffset() ;
+				if ( y < h )
+				{
+					/* On the top of the map and draw the slide down of the tank*/
+					y = y + (rows + 1) * MAP.getYoffset();
+				}
+				else if ( y + height > MAP.getHeight() )
+				{
+					/* On the bottom of the map and drawm the slide top of the tank*/
+					y = y - 2 * MAP.getYoffset();
+				}
+				else 
+				{
+					y = down ? y + (rows + 1) * MAP.getYoffset() : y - 2 * MAP.getYoffset();
+				}
 				g.drawRect(x, y, w, h);
 				
 				//draw the blood slider
 				if ( life == -1 ) life = blood;
 				g.fillRect(x + 1, y, blood * (w - 1) / life, h);
 				
-				//draw the life number
+				
+				//front color
 				g.setColor(Color.WHITE);
 				g.setFont(font);
+				
+				//draw the life number
 				String str = blood+"/"+life+","+missile;
 				g.drawString(str,
 						x + ( w - g.getFontMetrics().stringWidth(str) ) / 2 + 2,
@@ -184,7 +208,7 @@ public class Tank {
 		switch ( d ) 
 		{
 		case IConstants.DIRECTION_U:
-			off = getUpMoveOffset(x, y); if ( off != 0 ) moveUp( off ); break;
+			off = getUpMoveOffset(x, y); if ( off != 0 ) 	moveUp( off ); break;
 		case IConstants.DIRECTION_RU:
 			off = getRightMoveOffset(x, y); if ( off != 0 )	moveRight(off);
 			off = getUpMoveOffset(x, y); if ( off != 0 )	moveUp( off );
@@ -205,7 +229,7 @@ public class Tank {
 			off = getLeftMoveOffset(x, y); if ( off != 0 ) 	moveLeft( off ); break;
 		case IConstants.DIRECTION_LU:	
 			off = getLeftMoveOffset(x, y); if ( off != 0 ) 	moveLeft( off );
-			off = getUpMoveOffset(x, y); if ( off != 0 ) moveUp( off );
+			off = getUpMoveOffset(x, y); if ( off != 0 ) 	moveUp( off );
 			break;
 		}
 	}
@@ -331,6 +355,26 @@ public class Tank {
 	}
 	public void reduceMovingBullets() {
 		movingBullets--;
+	}
+	
+	/**
+	 * get the height of the tank
+	 * 
+	 * @return int
+	 */
+	public int getHeight()
+	{
+		return height;
+	}
+	
+	/**
+	 * get the width of the tank
+	 * 
+	 * @return int
+	 */
+	public int getWidth()
+	{
+		return width;
 	}
 	
 	/**

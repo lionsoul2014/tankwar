@@ -21,13 +21,15 @@ public class RandomTank extends Tank {
 	private int shotInterval = 10;
 	
 	public RandomTank(Battlefield bf, Image[] images, int t, int serial,
-				int x, int y, int rows, int cols ) {
+				int x, int y, int rows, int cols ) 
+	{
 		super(bf, images, t, serial, x, y, rows, cols);
 		infokey = "R";
 	}
 	
 	public RandomTank( Battlefield bf, Image[] images, int t,
-			int serial, int x, int y, int rows, int cols, int head, int blood ) {
+			int serial, int x, int y, int rows, int cols, int head, int blood ) 
+	{
 		super(bf, images, t, serial, x, y, rows, cols, head, blood);
 		infokey = "R";
 	}

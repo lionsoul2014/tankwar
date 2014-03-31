@@ -21,18 +21,20 @@ public class WichTank extends RandomTank
 	//searching area (take MAP.col and MAP.row as unit)
 	private int radius = 0;
 	
-	private int CBFACOTR_CS = 5;
-	private int cbfactor = CBFACOTR_CS;
+	private int SHOT_TIMEOUT_FACOTR_CS = 5;
+	private int cbfactor = SHOT_TIMEOUT_FACOTR_CS;
 
 	public WichTank(Battlefield bf, Image[] images, int t, int serial,
-			int x, int y, int cols, int rows) {
+			int x, int y, int cols, int rows) 
+	{
 		super(bf, images, t, serial, x, y, cols, rows);
 		infokey = "W";
 		radius = 2 * cols;
 	}
 	
 	public WichTank( Battlefield bf, Image[] images, int t,
-			int serial, int x, int y, int rows, int cols, int head, int blood ) {
+			int serial, int x, int y, int rows, int cols, int head, int blood ) 
+	{
 		super(bf, images, t, serial, x, y, rows, cols, head, blood);
 		infokey = "W";
 	}
@@ -85,8 +87,11 @@ public class WichTank extends RandomTank
 		}
 		
 		/*
-		 * find a hero tank around
-		 * so try to get its position and head it then shot it 
+		 * the hero tank has scraed the wich.(in its scraed circle)
+		 * And of course, wich will shot it crazy, and you will find youself
+		 * impossible to avoid its attack(the iron wall will make you survive).
+		 * 
+		 * @date: 2014-02-06
 		 */
 		if ( __check == true ) 
 		{
@@ -119,14 +124,15 @@ public class WichTank extends RandomTank
 					direction = IConstants.DIRECTION_U;
 			}
 			
-			//set the head and fire a bullet
+			//reset the head
 			head = direction;
 			
+			//fire the bullets with a specified timeout
 			cbfactor--;
 			if ( cbfactor == 0 ) 
 			{
-				addBullets();
-				cbfactor = CBFACOTR_CS;
+				addBullets();			//add bullets in the work main thread.
+				cbfactor = SHOT_TIMEOUT_FACOTR_CS;
 			}
 		}
 	}

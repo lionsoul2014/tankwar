@@ -26,6 +26,6 @@ public class IConstants {
 	public static final int T_WIDTH = 48;
 	public static final int T_HEIGHT = 48;
 	
-	public static final Font iFont = new Font("宋体", Font.PLAIN, 12);
+	public static final Font iFont = new Font("Arial", Font.PLAIN, 12);
 	public static final Color iColor = Color.RED;
 }

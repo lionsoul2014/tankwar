@@ -16,14 +16,14 @@ public class GameHelp {
 	
 	
 	public static final String[] HELP = new String[]{
-		"游戏操作帮助: ",
-		"J - 发射普通子弹",
-		"K - 发射普通炸弹",
-		"L - 发射无敌飞弹",
-		"P - 暂停/开始",
-		"ESC - 回到关卡选择",
-		"M - 简易/复杂模式切换",
-		"H - 弹出/关闭本窗口"
+		"Game Operation Hep: ",
+		"J - Shot ordinary bullets",
+		"K - Shot ordinary bombs",
+		"L - Shot super missile",
+		"P - pause/resume",
+		"ESC - back",
+		"M -  Mode switch",
+		"H - Show/hide this window"
 	};
 	
 	private Image image = null;

@@ -13,9 +13,9 @@ public class LionBarriers {
 	public static final Barriers[] DEFAULT = new Barriers[] {
 		new Barriers(
 			15, 
-			//direction, offset, blood, bomb, missile
+			//direction, move offset, blood, bomb, missile
 			new int[] {IConstants.DIRECTION_U, 1, 5, 2, 1},
-			//direction, offset, blood, bomb, missile, move interval, shot interval
+			//direction, move offset, blood, bomb, missile, move interval, shot interval
 			new int[] {IConstants.DIRECTION_D, 1, 1, 0, 0, 50, 80},
 			//bullet, offset, blood
 			new short[][] {					//hero
