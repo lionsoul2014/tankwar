@@ -201,9 +201,9 @@
    limitations under the License.
 
 ==========================================================================
-The following license applies to the JQuery JavaScript library
+The following license applies to the tankwar Java library
 --------------------------------------------------------------------------
-Copyright (c) 2010 John Resig, http://jquery.com/
+Copyright (c) 2013 lionsoul<chenxin619315@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
